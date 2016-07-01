@@ -12,7 +12,7 @@
      -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.thoughtworks.xstream</groupId>
+    <groupId>org.jetbrains.teamcity.xstream</groupId>
     <artifactId>xstream-parent</artifactId>
     <version>1.4.16-SNAPSHOT</version>
   </parent>
@@ -101,7 +101,7 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
+      <groupId>org.jetbrains.teamcity.xstream</groupId>
       <artifactId>xstream</artifactId>
     </dependency>
     <dependency>

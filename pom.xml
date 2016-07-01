@@ -11,7 +11,7 @@
      Created on 29. July 2006 by Mauro Talevi
      -->
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.thoughtworks.xstream</groupId>
+  <groupId>org.jetbrains.teamcity.xstream</groupId>
   <artifactId>xstream-parent</artifactId>
   <packaging>pom</packaging>
   <version>1.4.16-SNAPSHOT</version>
@@ -408,12 +408,12 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream</artifactId>
         <version>1.4.16-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream</artifactId>
         <version>1.4.16-SNAPSHOT</version>
         <classifier>tests</classifier>
@@ -421,43 +421,43 @@
         <scope>test</scope>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream</artifactId>
         <version>1.4.16-SNAPSHOT</version>
         <classifier>javadoc</classifier>
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-hibernate</artifactId>
         <version>1.4.16-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-hibernate</artifactId>
         <version>1.4.16-SNAPSHOT</version>
         <classifier>javadoc</classifier>
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-jmh</artifactId>
         <version>1.4.16-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-jmh</artifactId>
         <version>1.4.16-SNAPSHOT</version>
         <classifier>javadoc</classifier>
         <scope>provided</scope>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-benchmark</artifactId>
         <version>1.4.16-SNAPSHOT</version>
       </dependency>
       <dependency>
-        <groupId>com.thoughtworks.xstream</groupId>
+        <groupId>org.jetbrains.teamcity.xstream</groupId>
         <artifactId>xstream-benchmark</artifactId>
         <version>1.4.16-SNAPSHOT</version>
         <classifier>javadoc</classifier>

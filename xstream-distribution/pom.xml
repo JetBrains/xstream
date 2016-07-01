@@ -12,7 +12,7 @@
      -->
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.thoughtworks.xstream</groupId>
+    <groupId>org.jetbrains.teamcity.xstream</groupId>
     <artifactId>xstream-parent</artifactId>
     <version>1.4.16-SNAPSHOT</version>
   </parent>
@@ -25,22 +25,22 @@
 
   <dependencies>
     <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
+      <groupId>org.jetbrains.teamcity.xstream</groupId>
       <artifactId>xstream</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
+      <groupId>org.jetbrains.teamcity.xstream</groupId>
       <artifactId>xstream-hibernate</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
+      <groupId>org.jetbrains.teamcity.xstream</groupId>
       <artifactId>xstream-jmh</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>com.thoughtworks.xstream</groupId>
+      <groupId>org.jetbrains.teamcity.xstream</groupId>
       <artifactId>xstream-benchmark</artifactId>
       <scope>runtime</scope>
     </dependency>
@@ -109,17 +109,17 @@
       </build>
       <dependencies>
         <dependency>
-          <groupId>com.thoughtworks.xstream</groupId>
+          <groupId>org.jetbrains.teamcity.xstream</groupId>
           <artifactId>xstream</artifactId>
           <classifier>javadoc</classifier>
         </dependency>
         <dependency>
-          <groupId>com.thoughtworks.xstream</groupId>
+          <groupId>org.jetbrains.teamcity.xstream</groupId>
           <artifactId>xstream-hibernate</artifactId>
           <classifier>javadoc</classifier>
         </dependency>
         <dependency>
-          <groupId>com.thoughtworks.xstream</groupId>
+          <groupId>org.jetbrains.teamcity.xstream</groupId>
           <artifactId>xstream-jmh</artifactId>
           <classifier>javadoc</classifier>
         </dependency>
