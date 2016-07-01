@@ -354,7 +354,6 @@ public class XStream {
         this(null, (Mapper)null, new XppDriver());
     }
 
-    @Deprecated
     public XStream(boolean is141Compatible) {
         this(null, (Mapper) null, new XppDriver(), is141Compatible);
     }
@@ -385,7 +384,6 @@ public class XStream {
         this(null, (Mapper)null, hierarchicalStreamDriver);
     }
 
-    @Deprecated
     public XStream(HierarchicalStreamDriver hierarchicalStreamDriver, boolean is141Compatible) {
         this(null, (Mapper) null, hierarchicalStreamDriver, is141Compatible);
     }
@@ -421,7 +419,6 @@ public class XStream {
      * {@link #XStream(ReflectionProvider, HierarchicalStreamDriver, ClassLoader, Mapper)}
      * instead
      */
-    @Deprecated
     public XStream(
             ReflectionProvider reflectionProvider, Mapper mapper, HierarchicalStreamDriver driver, boolean is141Compatible) {
         this(reflectionProvider, driver, new CompositeClassLoader(), mapper, is141Compatible);
@@ -478,7 +475,6 @@ public class XStream {
      * @deprecated As of 1.4.5 use
      *             {@link #XStream(ReflectionProvider, HierarchicalStreamDriver, ClassLoaderReference, Mapper)}
      */
-    @Deprecated
     public XStream(
             ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver,
             ClassLoader classLoader, Mapper mapper, boolean is141Compatible) {
@@ -519,7 +515,6 @@ public class XStream {
         });
     }
 
-    @Deprecated
     private XStream(
             ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver, ClassLoaderReference classLoader,
             Mapper mapper, final DefaultConverterLookup defaultConverterLookup, boolean is141Compatible) {
@@ -584,7 +579,6 @@ public class XStream {
         this(reflectionProvider, driver, classLoaderReference, mapper, converterLookup, converterRegistry, true);
     }
 
-    @Deprecated
     public XStream(
             ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver,
             ClassLoaderReference classLoaderReference, Mapper mapper, ConverterLookup converterLookup,
