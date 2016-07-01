@@ -321,6 +321,8 @@ public class XStream {
     private transient boolean securityInitialized;
     private transient boolean securityWarningGiven;
 
+    private boolean is141Compatible = true;
+
     public static final int NO_REFERENCES = 1001;
     public static final int ID_REFERENCES = 1002;
     public static final int XPATH_RELATIVE_REFERENCES = 1003;
@@ -574,7 +576,7 @@ public class XStream {
         }
         mapper = new LocalConversionMapper(mapper);
         mapper = new ImmutableTypesMapper(mapper);
-        if (JVM.isVersion(8)) {
+        if (JVM.isVersion(8) && !is141Compatible) {
             mapper = buildMapperDynamically("com.thoughtworks.xstream.mapper.LambdaMapper", new Class[]{Mapper.class},
                 new Object[]{mapper});
         }
@@ -660,7 +662,7 @@ public class XStream {
      * well-known and simply types of the Java runtime as it is done in XStream 1.5.x by default. This method will do
      * therefore nothing in XStream 1.5.
      * </p>
-     * 
+     *
      * @param xstream
      * @since 1.4.10
      */
@@ -794,12 +796,14 @@ public class XStream {
         alias("tree-set", TreeSet.class);
         alias("hashtable", Hashtable.class);
 
-        alias("empty-list", Collections.EMPTY_LIST.getClass());
-        alias("empty-map", Collections.EMPTY_MAP.getClass());
-        alias("empty-set", Collections.EMPTY_SET.getClass());
-        alias("singleton-list", Collections.singletonList(this).getClass());
-        alias("singleton-map", Collections.singletonMap(this, null).getClass());
-        alias("singleton-set", Collections.singleton(this).getClass());
+        if (!is141Compatible) {
+            alias("empty-list", Collections.EMPTY_LIST.getClass());
+            alias("empty-map", Collections.EMPTY_MAP.getClass());
+            alias("empty-set", Collections.EMPTY_SET.getClass());
+            alias("singleton-list", Collections.singletonList(this).getClass());
+            alias("singleton-map", Collections.singletonMap(this, null).getClass());
+            alias("singleton-set", Collections.singleton(this).getClass());
+        }
 
         if (JVM.isAWTAvailable()) {
             // Instantiating these two classes starts the AWT system, which is undesirable.
@@ -811,7 +815,7 @@ public class XStream {
         }
 
         Class type = JVM.loadClassForName("javax.activation.ActivationDataFlavor");
-        if (type != null) {
+        if (type != null && !is141Compatible) {
             alias("activation-data-flavor", type);
         }
 
@@ -835,19 +839,21 @@ public class XStream {
         }
 
         if (JVM.isVersion(5)) {
-            aliasDynamically("xml-duration", "javax.xml.datatype.Duration");
-            alias("concurrent-hash-map", JVM.loadClassForName("java.util.concurrent.ConcurrentHashMap"));
+            aliasDynamically(is141Compatible ? "duration" : "xml-duration", "javax.xml.datatype.Duration");
+            if (!is141Compatible) {
+                alias("concurrent-hash-map", JVM.loadClassForName("java.util.concurrent.ConcurrentHashMap"));
+            }
             alias("enum-set", JVM.loadClassForName("java.util.EnumSet"));
             alias("enum-map", JVM.loadClassForName("java.util.EnumMap"));
             alias("string-builder", JVM.loadClassForName("java.lang.StringBuilder"));
             alias("uuid", JVM.loadClassForName("java.util.UUID"));
         }
 
-        if (JVM.isVersion(7)) {
+        if (JVM.isVersion(7) && !is141Compatible) {
             aliasType("path", JVM.loadClassForName("java.nio.file.Path"));
         }
 
-        if (JVM.isVersion(8)) {
+        if (JVM.isVersion(8) && !is141Compatible) {
             alias("fixed-clock", JVM.loadClassForName("java.time.Clock$FixedClock"));
             alias("offset-clock", JVM.loadClassForName("java.time.Clock$OffsetClock"));
             alias("system-clock", JVM.loadClassForName("java.time.Clock$SystemClock"));
@@ -885,7 +891,7 @@ public class XStream {
             alias("week-fields", JVM.loadClassForName("java.time.temporal.WeekFields"));
         }
 
-        if (JVM.loadClassForName("java.lang.invoke.SerializedLambda") != null) {
+        if (JVM.loadClassForName("java.lang.invoke.SerializedLambda") != null && !is141Compatible) {
             aliasDynamically("serialized-lambda", "java.lang.invoke.SerializedLambda");
         }
     }
@@ -939,8 +945,10 @@ public class XStream {
         registerConverter(new MapConverter(mapper), PRIORITY_NORMAL);
         registerConverter(new TreeMapConverter(mapper), PRIORITY_NORMAL);
         registerConverter(new TreeSetConverter(mapper), PRIORITY_NORMAL);
-        registerConverter(new SingletonCollectionConverter(mapper), PRIORITY_NORMAL);
-        registerConverter(new SingletonMapConverter(mapper), PRIORITY_NORMAL);
+        if (!is141Compatible) {
+            registerConverter(new SingletonCollectionConverter(mapper), PRIORITY_NORMAL);
+            registerConverter(new SingletonMapConverter(mapper), PRIORITY_NORMAL);
+        }
         registerConverter(new PropertiesConverter(), PRIORITY_NORMAL);
         registerConverter((Converter)new EncodedByteArrayConverter(), PRIORITY_NORMAL);
 
@@ -999,15 +1007,15 @@ public class XStream {
             registerConverterDynamically("com.thoughtworks.xstream.converters.basic.UUIDConverter", PRIORITY_NORMAL,
                 null, null);
         }
-        if (JVM.loadClassForName("javax.activation.ActivationDataFlavor") != null) {
+        if (!is141Compatible && JVM.loadClassForName("javax.activation.ActivationDataFlavor") != null) {
             registerConverterDynamically("com.thoughtworks.xstream.converters.extended.ActivationDataFlavorConverter",
                 PRIORITY_NORMAL, null, null);
         }
-        if (JVM.isVersion(7)) {
-            registerConverterDynamically("com.thoughtworks.xstream.converters.extended.PathConverter", PRIORITY_NORMAL,
-                null, null);
+        if (!is141Compatible && JVM.isVersion(7)) {
+            registerConverterDynamically("com.thoughtworks.xstream.converters.extended.PathConverter",
+                    PRIORITY_NORMAL, null, null);
         }
-        if (JVM.isVersion(8)) {
+        if (!is141Compatible && JVM.isVersion(8)) {
             registerConverterDynamically("com.thoughtworks.xstream.converters.time.ChronologyConverter",
                 PRIORITY_NORMAL, null, null);
             registerConverterDynamically("com.thoughtworks.xstream.converters.time.DurationConverter", PRIORITY_NORMAL,
@@ -1112,7 +1120,9 @@ public class XStream {
         addImmutableType(File.class, false);
         addImmutableType(Class.class, false);
 
-        if (JVM.isVersion(7)) {
+
+
+        if (!is141Compatible && JVM.isVersion(7)) {
             Class type = JVM.loadClassForName("java.nio.file.Paths");
             if (type != null) {
                 Method methodGet;
@@ -1142,16 +1152,20 @@ public class XStream {
             addImmutableTypeDynamically("java.util.Currency", true);
         }
 
-        if (JVM.isVersion(5)) {
+
+        if (!is141Compatible && JVM.isVersion(5)) {
             addImmutableTypeDynamically("java.util.UUID", true);
         }
 
-        addImmutableType(URI.class, true);
-        addImmutableType(Collections.EMPTY_LIST.getClass(), true);
-        addImmutableType(Collections.EMPTY_SET.getClass(), true);
-        addImmutableType(Collections.EMPTY_MAP.getClass(), true);
 
-        if (JVM.isVersion(8)) {
+        if (!is141Compatible) {
+            addImmutableType(URI.class, true);
+            addImmutableType(Collections.EMPTY_LIST.getClass(), true);
+            addImmutableType(Collections.EMPTY_SET.getClass(), true);
+            addImmutableType(Collections.EMPTY_MAP.getClass(), true);
+        }
+
+        if (!is141Compatible && JVM.isVersion(8)) {
             addImmutableTypeDynamically("java.time.Duration", false);
             addImmutableTypeDynamically("java.time.Instant", false);
             addImmutableTypeDynamically("java.time.LocalDate", false);
@@ -1648,7 +1662,7 @@ public class XStream {
                 + ImmutableTypesMapper.class.getName()
                 + " available");
         }
-        immutableTypesMapper.addImmutableType(type, isReferenceable);
+        immutableTypesMapper.addImmutableType(type, is141Compatible ? true : isReferenceable);
     }
 
     public void registerConverter(Converter converter) {
