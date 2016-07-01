@@ -354,6 +354,11 @@ public class XStream {
         this(null, (Mapper)null, new XppDriver());
     }
 
+    @Deprecated
+    public XStream(boolean is141Compatible) {
+        this(null, (Mapper) null, new XppDriver(), is141Compatible);
+    }
+
     /**
      * Constructs an XStream with a special {@link ReflectionProvider}.
      * <p>
@@ -364,7 +369,7 @@ public class XStream {
      * @throws InitializationException in case of an initialization problem
      */
     public XStream(ReflectionProvider reflectionProvider) {
-        this(reflectionProvider, (Mapper)null, new XppDriver());
+        this(reflectionProvider, (Mapper) null, new XppDriver(), true);
     }
 
     /**
@@ -378,6 +383,11 @@ public class XStream {
      */
     public XStream(HierarchicalStreamDriver hierarchicalStreamDriver) {
         this(null, (Mapper)null, hierarchicalStreamDriver);
+    }
+
+    @Deprecated
+    public XStream(HierarchicalStreamDriver hierarchicalStreamDriver, boolean is141Compatible) {
+        this(null, (Mapper) null, hierarchicalStreamDriver, is141Compatible);
     }
 
     /**
@@ -404,6 +414,17 @@ public class XStream {
      */
     public XStream(ReflectionProvider reflectionProvider, Mapper mapper, HierarchicalStreamDriver driver) {
         this(reflectionProvider, driver, new CompositeClassLoader(), mapper);
+    }
+
+    /**
+     * @deprecated As of 1.3, use
+     * {@link #XStream(ReflectionProvider, HierarchicalStreamDriver, ClassLoader, Mapper)}
+     * instead
+     */
+    @Deprecated
+    public XStream(
+            ReflectionProvider reflectionProvider, Mapper mapper, HierarchicalStreamDriver driver, boolean is141Compatible) {
+        this(reflectionProvider, driver, new CompositeClassLoader(), mapper, is141Compatible);
     }
 
     /**
@@ -454,6 +475,17 @@ public class XStream {
     }
 
     /**
+     * @deprecated As of 1.4.5 use
+     *             {@link #XStream(ReflectionProvider, HierarchicalStreamDriver, ClassLoaderReference, Mapper)}
+     */
+    @Deprecated
+    public XStream(
+            ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver,
+            ClassLoader classLoader, Mapper mapper, boolean is141Compatible) {
+        this(reflectionProvider, driver, new ClassLoaderReference(classLoader), mapper, new DefaultConverterLookup(), is141Compatible);
+    }
+
+    /**
      * Constructs an XStream with a special {@link HierarchicalStreamDriver}, {@link ReflectionProvider}, a prepared
      * {@link Mapper} chain and the {@link ClassLoaderReference}.
      * <p>
@@ -485,6 +517,21 @@ public class XStream {
                 defaultConverterLookup.registerConverter(converter, priority);
             }
         });
+    }
+
+    @Deprecated
+    private XStream(
+            ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver, ClassLoaderReference classLoader,
+            Mapper mapper, final DefaultConverterLookup defaultConverterLookup, boolean is141Compatible) {
+        this(reflectionProvider, driver, classLoader, mapper, new ConverterLookup() {
+            public Converter lookupConverterForType(Class type) {
+                return defaultConverterLookup.lookupConverterForType(type);
+            }
+        }, new ConverterRegistry() {
+            public void registerConverter(Converter converter, int priority) {
+                defaultConverterLookup.registerConverter(converter, priority);
+            }
+        }, is141Compatible);
     }
 
     /**
@@ -531,12 +578,21 @@ public class XStream {
      * @since 1.4.5
      */
     public XStream(
+        ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver,
+        ClassLoaderReference classLoaderReference, Mapper mapper, ConverterLookup converterLookup,
+        ConverterRegistry converterRegistry) {
+        this(reflectionProvider, driver, classLoaderReference, mapper, converterLookup, converterRegistry, true);
+    }
+
+    @Deprecated
+    public XStream(
             ReflectionProvider reflectionProvider, HierarchicalStreamDriver driver,
             ClassLoaderReference classLoaderReference, Mapper mapper, ConverterLookup converterLookup,
-            ConverterRegistry converterRegistry) {
+            ConverterRegistry converterRegistry, boolean is141Compatible) {
         if (reflectionProvider == null) {
             reflectionProvider = JVM.newReflectionProvider();
         }
+        this.is141Compatible = is141Compatible;
         this.reflectionProvider = reflectionProvider;
         this.hierarchicalStreamDriver = driver;
         this.classLoaderReference = classLoaderReference;
