@@ -47,7 +47,7 @@ public class EnumMapper extends MapperWrapper implements Caching {
         this(wrapped, true);
     }
 
-    public EnumMapper(Mapper wrapped, boolean is141Compatible) {
+    public EnumMapper(Mapper wrapped, Boolean is141Compatible) {
         super(wrapped);
         this.is141Compatible = is141Compatible;
         readResolve();
