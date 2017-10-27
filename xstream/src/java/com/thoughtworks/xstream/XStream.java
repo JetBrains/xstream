@@ -621,8 +621,9 @@ public class XStream {
         mapper = new DefaultImplementationsMapper(mapper);
         mapper = new AttributeMapper(mapper, converterLookup, reflectionProvider);
         if (JVM.isVersion(5)) {
-            mapper = buildMapperDynamically("com.thoughtworks.xstream.mapper.EnumMapper", new Class[]{Mapper.class},
-                new Object[]{mapper});
+            mapper = buildMapperDynamically(
+                "com.thoughtworks.xstream.mapper.EnumMapper", new Class[]{Mapper.class, boolean.class},
+                new Object[]{mapper, is141Compatible});
         }
         mapper = new LocalConversionMapper(mapper);
         mapper = new ImmutableTypesMapper(mapper);
@@ -1712,7 +1713,7 @@ public class XStream {
                 + ImmutableTypesMapper.class.getName()
                 + " available");
         }
-        immutableTypesMapper.addImmutableType(type, is141Compatible ? true : isReferenceable);
+        immutableTypesMapper.addImmutableType(type, is141Compatible || isReferenceable);
     }
 
     public void registerConverter(Converter converter) {

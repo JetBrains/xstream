@@ -31,6 +31,7 @@ import java.util.Map;
  */
 public class EnumMapper extends MapperWrapper implements Caching {
 
+    private final boolean is141Compatible;
     private transient AttributeMapper attributeMapper;
     private transient Map<Class, SingleValueConverter> enumConverterMap;
 
@@ -39,12 +40,16 @@ public class EnumMapper extends MapperWrapper implements Caching {
      */
     @Deprecated
     public EnumMapper(Mapper wrapped, ConverterLookup lookup) {
-        super(wrapped);
-        readResolve();
+        this(wrapped);
     }
 
     public EnumMapper(Mapper wrapped) {
+        this(wrapped, true);
+    }
+
+    public EnumMapper(Mapper wrapped, boolean is141Compatible) {
         super(wrapped);
+        this.is141Compatible = is141Compatible;
         readResolve();
     }
 
@@ -69,7 +74,7 @@ public class EnumMapper extends MapperWrapper implements Caching {
 
     @Override
     public boolean isReferenceable(final Class type) {
-        if (type != null && Enum.class.isAssignableFrom(type)) {
+        if (!is141Compatible && type != null && Enum.class.isAssignableFrom(type)) {
             return false;
         } else {
             return super.isReferenceable(type);
