@@ -1467,9 +1467,7 @@ public class XStream {
         try {
             if (!securityInitialized && !securityWarningGiven) {
                 securityWarningGiven = true;
-                System.err
-                    .println(
-                        "Security framework of XStream not explicitly initialized, using predefined black list on your own risk.");
+                if (!is141Compatible) System.err.println("Security framework of XStream not explicitly initialized, using predefined black list on your own risk.");
             }
             return marshallingStrategy.unmarshal(root, reader, dataHolder, converterLookup, mapper);
 
