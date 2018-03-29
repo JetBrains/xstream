@@ -52,6 +52,10 @@ public class SunLimitedUnsafeReflectionProvider extends PureJavaReflectionProvid
             ex = e;
         } catch (IllegalAccessException e) {
             ex = e;
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            ex = e;
         }
         exception = ex;
         unsafe = u;

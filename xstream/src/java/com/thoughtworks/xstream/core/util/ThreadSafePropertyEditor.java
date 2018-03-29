@@ -53,6 +53,10 @@ public class ThreadSafePropertyEditor {
                     ex = new ConversionException("Faild to call default constructor", e);
                 } catch (IllegalAccessException e) {
                     ex = new ObjectAccessException("Cannot call default constructor", e);
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                    ex = new ObjectAccessException("Cannot call default constructor", e);
                 }
                 ex.add("construction-type", editorType.getName());
                 throw ex;

@@ -67,6 +67,10 @@ public class SjsxpDriver extends StaxDriver {
             exception = e;
         } catch (ClassNotFoundException e) {
             exception = e;
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            exception = e;
         }
         throw new StreamException("Cannot create SJSXP (Sun JDK 6 StAX) XMLInputFactory instance.", exception);
     }
@@ -83,6 +87,10 @@ public class SjsxpDriver extends StaxDriver {
         } catch (IllegalAccessException e) {
             exception = e;
         } catch (ClassNotFoundException e) {
+            exception = e;
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
             exception = e;
         }
         throw new StreamException("Cannot create SJSXP (Sun JDK 6 StAX) XMLOutputFactory instance.", exception);

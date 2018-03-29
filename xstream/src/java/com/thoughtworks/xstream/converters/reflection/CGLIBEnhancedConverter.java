@@ -169,6 +169,12 @@ public class CGLIBEnhancedConverter extends SerializableConverter {
             ObjectAccessException exception = new ObjectAccessException("Cannot access field", e);
             exception.add("field", type.getName() + ".serialVersionUID");
             throw exception;
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            ObjectAccessException exception = new ObjectAccessException("Cannot access field", e);
+            exception.add("field", type.getName() + ".serialVersionUID");
+            throw exception;
         }
         if (hasInterceptor) {
             writer.startNode("instance");
@@ -202,6 +208,12 @@ public class CGLIBEnhancedConverter extends SerializableConverter {
                 Object callback = field.get(source);
                 list.add(callback);
             } catch (IllegalAccessException e) {
+                ObjectAccessException exception = new ObjectAccessException("Cannot access field", e);
+                exception.add("field", type.getName() + "." + CALLBACK_MARKER + i);
+                throw exception;
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
                 ObjectAccessException exception = new ObjectAccessException("Cannot access field", e);
                 exception.add("field", type.getName() + "." + CALLBACK_MARKER + i);
                 throw exception;
@@ -266,6 +278,12 @@ public class CGLIBEnhancedConverter extends SerializableConverter {
                         ? (Object[])null
                         : createNullArguments(parameterTypes));
                 } catch (IllegalAccessException e) {
+                    ObjectAccessException exception = new ObjectAccessException("Cannot access method", e);
+                    exception.add("method", calledMethod.toString());
+                    throw exception;
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
                     ObjectAccessException exception = new ObjectAccessException("Cannot access method", e);
                     exception.add("method", calledMethod.toString());
                     throw exception;

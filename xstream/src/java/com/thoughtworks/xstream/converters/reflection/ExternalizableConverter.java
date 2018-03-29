@@ -180,6 +180,10 @@ public class ExternalizableConverter implements Converter {
             throw new StreamException("Cannot externalize " + type.getClass(), e);
         } catch (ClassNotFoundException e) {
             throw new ConversionException("Cannot construct type", e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            throw new ObjectAccessException("Cannot construct type", e);
         }
     }
 

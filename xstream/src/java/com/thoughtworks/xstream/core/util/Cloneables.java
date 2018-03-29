@@ -49,6 +49,10 @@ public class Cloneables {
                     throw new ObjectAccessException("Cannot clone Cloneable type", e);
                 } catch (InvocationTargetException e) {
                     throw new ObjectAccessException("Exception cloning Cloneable type", e.getCause());
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                    throw new ObjectAccessException("Cannot clone Cloneable type", e);
                 }
             }
         }

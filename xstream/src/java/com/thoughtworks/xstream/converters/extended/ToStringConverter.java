@@ -51,6 +51,10 @@ public class ToStringConverter extends AbstractSingleValueConverter {
             throw new ObjectAccessException("Unable to access single String param constructor", e);
         } catch (InvocationTargetException e) {
             throw new ConversionException("Unable to target single String param constructor", e.getTargetException());
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            throw new ObjectAccessException("Unable to access single String param constructor", e);
         }
     }
 }

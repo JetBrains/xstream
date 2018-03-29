@@ -80,6 +80,10 @@ public class SerializationMembers implements Caching {
                     ex = new ObjectAccessException("Cannot access method", e);
                 } catch (InvocationTargetException e) {
                     ex = new ConversionException("Failed calling method", e.getTargetException());
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                    ex = new ObjectAccessException("Cannot access method", e);
                 }
                 ex.add("method", resultType.getName() + ".readResolve()");
                 throw ex;
@@ -110,6 +114,10 @@ public class SerializationMembers implements Caching {
                     ex = new ConversionException("Failed calling method", e.getTargetException());
                 } catch (final ErrorWritingException e) {
                     ex = e;
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                    ex = new ObjectAccessException("Cannot access method", e);
                 }
                 ex.add("method", objectType.getName() + ".writeReplace()");
                 throw ex;
@@ -134,6 +142,10 @@ public class SerializationMembers implements Caching {
             ex = new ObjectAccessException("Cannot access method", e);
         } catch (InvocationTargetException e) {
             ex = new ConversionException("Failed calling method", e.getTargetException());
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            ex = new ObjectAccessException("Cannot access method", e);
         }
         if (ex != null) {
             ex.add("method", object.getClass().getName() + ".readObject()");
@@ -156,6 +168,10 @@ public class SerializationMembers implements Caching {
             ex = new ObjectAccessException("Cannot access method", e);
         } catch (InvocationTargetException e) {
             ex = new ConversionException("Failed calling method", e.getTargetException());
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            ex = new ObjectAccessException("Cannot access method", e);
         }
         if (ex != null) {
             ex.add("method", instance.getClass().getName() + ".writeObject()");
@@ -236,6 +252,10 @@ public class SerializationMembers implements Caching {
                     ex = new ObjectAccessException("Cannot get field", e);
                 } catch (final ClassCastException e) {
                     ex = new ConversionException("Incompatible field type", e);
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                    ex = new ObjectAccessException("Cannot get field", e);
                 }
                 if (ex != null) {
                     ex.add("field", type.getName() + ".serialPersistentFields");

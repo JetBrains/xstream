@@ -235,6 +235,10 @@ public class DependencyInjectionFactory {
             th = e;
         } catch (final ExceptionInInitializerError e) {
             th = e;
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            th = e;
         }
         final ObjectAccessException ex = new ObjectAccessException("Cannot construct type", th);
         ex.add("construction-type", type.getName());

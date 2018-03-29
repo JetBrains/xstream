@@ -108,6 +108,10 @@ public class AnnotationReflectionConverter extends ReflectionConverter {
             throw new ObjectAccessException("Cannot construct " + type.getName(), e);
         } catch (NoSuchMethodException e) {
             throw new ObjectAccessException("Cannot construct " + type.getName(), e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            throw new ObjectAccessException("Cannot construct " + type.getName(), e);
         }
         return converter;
     }

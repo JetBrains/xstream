@@ -49,6 +49,9 @@ public class ISO8601GregorianCalendarConverter extends AbstractSingleValueConver
             // ignore
         } catch (final NoSuchMethodException e) {
             // ignore
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
         }
         converter = svConverter;
     }

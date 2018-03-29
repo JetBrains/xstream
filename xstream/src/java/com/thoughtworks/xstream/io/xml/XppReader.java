@@ -100,6 +100,10 @@ public class XppReader extends AbstractPullReader {
             exception = e;
         } catch (ClassNotFoundException e) {
             exception = e;
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            exception = e;
         }
         throw new StreamException("Cannot create Xpp3 parser instance.", exception);
     }

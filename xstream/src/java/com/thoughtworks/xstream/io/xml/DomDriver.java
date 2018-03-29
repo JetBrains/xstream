@@ -156,6 +156,10 @@ public class DomDriver extends AbstractXmlDriver {
                                 &&  cause.getMessage().indexOf("disallow-doctype-decl") < 0)) { 
                     throw new StreamException(cause);
                 }
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                throw new ObjectAccessException("Cannot set feature of DocumentBuilderFactory.", e);
             }
         }
         factory.setExpandEntityReferences(false);

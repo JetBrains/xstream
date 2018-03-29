@@ -87,6 +87,10 @@ public class StandardStaxDriver extends StaxDriver {
             exception = e;
         } catch (ClassNotFoundException e) {
             exception = e;
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            exception = e;
         }
         throw new StreamException("Cannot create standard XMLInputFactory instance of Java runtime.", exception);
     }
@@ -105,6 +109,10 @@ public class StandardStaxDriver extends StaxDriver {
         } catch (IllegalAccessException e) {
             exception = e;
         } catch (ClassNotFoundException e) {
+            exception = e;
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
             exception = e;
         }
         throw new StreamException("Cannot create standard XMLOutputFactory instance of Java runtime.", exception);

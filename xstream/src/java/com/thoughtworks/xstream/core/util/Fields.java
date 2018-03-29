@@ -43,6 +43,10 @@ public class Fields {
             // active SecurityManager
         } catch (final NoClassDefFoundError e) {
             // restricted type in GAE
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            // restricted module access
         }
         return field;
     }
@@ -60,6 +64,11 @@ public class Fields {
             throw wrap("Cannot access field", type, name, e);
         } catch (final NoClassDefFoundError e) {
             throw wrap("Cannot access field", type, name, e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            // restricted module access
+            throw wrap("Cannot access field", type, name, e);
         }
     }
 
@@ -74,6 +83,11 @@ public class Fields {
             throw wrap("Cannot write field", field.getType(), field.getName(), e);
         } catch (final NoClassDefFoundError e) {
             throw wrap("Cannot write field", field.getType(), field.getName(), e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            // restricted module access
+            throw wrap("Cannot write field", field.getType(), field.getName(), e);
         }
     }
 
@@ -87,6 +101,11 @@ public class Fields {
         } catch (final IllegalAccessException e) {
             throw wrap("Cannot read field", field.getType(), field.getName(), e);
         } catch (final NoClassDefFoundError e) {
+            throw wrap("Cannot read field", field.getType(), field.getName(), e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            // restricted module access
             throw wrap("Cannot read field", field.getType(), field.getName(), e);
         }
     }

@@ -128,6 +128,10 @@ public class TreeMapConverter extends MapConverter {
             }
         } catch (final IllegalAccessException e) {
             throw new ObjectAccessException("Cannot set comparator of TreeMap", e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            throw new ObjectAccessException("Cannot set comparator of TreeMap", e);
         }
     }
 

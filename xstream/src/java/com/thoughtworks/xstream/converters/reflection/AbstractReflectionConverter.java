@@ -69,6 +69,10 @@ public abstract class AbstractReflectionConverter implements Converter, Caching 
             return true;
         } catch (NoClassDefFoundError e) {
             // restricted type in GAE
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            // restricted module access
         }
         return false;
     }

@@ -75,6 +75,10 @@ public class BeanProvider implements JavaBeanProvider {
                 ex = new ObjectAccessException("Cannot construct type", e);
             } catch (ExceptionInInitializerError e) {
                 ex = new ConversionException("Cannot construct type", e);
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                ex = new ObjectAccessException("Cannot construct type", e);
             }
         }
         ex.add("construction-type", type.getName());
@@ -100,6 +104,10 @@ public class BeanProvider implements JavaBeanProvider {
                 ex = new ObjectAccessException("Cannot access property", e);
             } catch (InvocationTargetException e) {
                 ex = new ConversionException("Cannot get property", e.getTargetException());
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                ex = new ConversionException("Cannot access property", e);
             }
             if (ex != null) {
                 ex.add("property", object.getClass() + "." + property.getName());
@@ -119,6 +127,10 @@ public class BeanProvider implements JavaBeanProvider {
             ex = new ObjectAccessException("Cannot access property", e);
         } catch (InvocationTargetException e) {
             ex = new ConversionException("Cannot set property", e.getTargetException());
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            ex = new ObjectAccessException("Cannot access property", e);
         }
         if (ex != null) {
             ex.add("property", object.getClass() + "." + property.getName());

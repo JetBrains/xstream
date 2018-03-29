@@ -158,6 +158,10 @@ public abstract class AbstractCollectionConverter implements Converter {
             ex =  new ConversionException("Cannot instantiate default collection", e);
         } catch (IllegalAccessException e) {
             ex = new ObjectAccessException("Cannot instantiate default collection", e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            ex = new ObjectAccessException("Cannot instantiate default collection", e);
         }
         ex.add("collection-type", type.getName());
         ex.add("default-type", defaultType.getName());

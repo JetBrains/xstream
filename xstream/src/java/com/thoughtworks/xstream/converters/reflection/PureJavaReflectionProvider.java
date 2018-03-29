@@ -95,6 +95,10 @@ public class PureJavaReflectionProvider implements ReflectionProvider {
                 } else {
                     ex = new ObjectAccessException("Constructor for type threw an exception", e.getTargetException());
                 }
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                ex = new ObjectAccessException("Cannot construct type", e);
             }
         }
         ex.add("construction-type", type.getName());
