@@ -198,6 +198,10 @@ public class CGLIBEnhancedConverter extends SerializableConverter {
                     fields.add(field);
                 } catch (NoSuchFieldException e) {
                     break;
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                    break;
                 }
             }
         }

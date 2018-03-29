@@ -97,6 +97,10 @@ public class JavaFieldConverter implements Converter {
             return declaringClass.getDeclaredField(mapper.realMember(declaringClass, methodName));
         } catch (NoSuchFieldException e) {
             throw new ConversionException(e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            throw new ConversionException(e);
         }
     }
 }

@@ -119,6 +119,10 @@ public class ToAttributedValueConverter implements Converter {
                 }
             } catch (NoSuchFieldException e) {
                 throw new IllegalArgumentException(e.getMessage() + ": " + valueFieldName);
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                throw new IllegalArgumentException(e.getMessage() + ": " + valueFieldName);
             }
             this.valueField = field;
         }

@@ -160,6 +160,9 @@ public class AbstractAttributedCharacterIteratorAttributeConverter extends
                 // ignore for now
             } catch (NoSuchMethodException e) {
                 // ignore for now
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
             }
             getName = method;
         }

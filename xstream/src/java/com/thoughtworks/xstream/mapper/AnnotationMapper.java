@@ -367,6 +367,14 @@ public class AnnotationMapper extends MapperWrapper implements AnnotationConfigu
                     + fieldName
                     + "' as required by "
                     + XStreamImplicitCollection.class.getName());
+            } catch (RuntimeException e) {
+                // Java 9
+                if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                throw new InitializationException(type.getName()
+                        + " does not have a field named '"
+                        + fieldName
+                        + "' as required by "
+                        + XStreamImplicitCollection.class.getName());
             }
             Class itemType = null;
             final Type genericType = field.getGenericType();

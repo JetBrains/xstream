@@ -202,6 +202,10 @@ public class SerializationMembers implements Caching {
                     }
                 } catch (NoSuchMethodException e) {
                     result = getMethod(type.getSuperclass(), name, parameterTypes);
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                    result = getMethod(type.getSuperclass(), name, parameterTypes);
                 }
                 declaredCache.put(method, result);
             }

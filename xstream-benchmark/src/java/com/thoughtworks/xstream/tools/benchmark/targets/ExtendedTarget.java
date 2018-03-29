@@ -42,7 +42,11 @@ public class ExtendedTarget implements Target {
             throw new ExceptionInInitializerError(e);
         } catch (NoSuchFieldException e) {
             throw new ExceptionInInitializerError(e);
-        } 
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            throw new ExceptionInInitializerError(e);
+        }
         EQUALS = method;
         LIST = field;
     }

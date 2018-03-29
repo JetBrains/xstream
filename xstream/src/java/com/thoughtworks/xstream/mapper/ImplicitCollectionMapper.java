@@ -115,6 +115,10 @@ public class ImplicitCollectionMapper extends MapperWrapper {
                     throw new InitializationException("Access denied for field with implicit collection", e);
                 } catch (final NoSuchFieldException e) {
                     declaredIn = declaredIn.getSuperclass();
+                } catch (RuntimeException e) {
+                    // Java 9
+                    if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+                    declaredIn = declaredIn.getSuperclass();
                 }
             }
         }

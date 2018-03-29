@@ -132,6 +132,10 @@ public class JavaMethodConverter implements Converter {
             }
         } catch (NoSuchMethodException e) {
             throw new ConversionException(e);
+        } catch (RuntimeException e) {
+            // Java 9
+            if (!"java.lang.reflect.InaccessibleObjectException".equals(e.getClass().getName())) throw e;
+            throw new ConversionException(e);
         }
     }
 }
