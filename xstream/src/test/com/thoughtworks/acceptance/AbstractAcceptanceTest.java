@@ -56,7 +56,7 @@ public abstract class AbstractAcceptanceTest extends TestCase {
     protected transient XStream xstream = createXStream();
     
     protected XStream createXStream() {
-        XStream xstream = new XStream(createDriver());
+        XStream xstream = new XStream(createDriver(), false);
         setupSecurity(xstream);
         return xstream;
     }
